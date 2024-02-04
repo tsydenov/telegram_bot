@@ -1,0 +1,28 @@
+Array
+(
+    [update_id] => 217964721
+    [message] => Array
+        (
+            [message_id] => 5
+            [from] => Array
+                (
+                    [id] => 259325279
+                    [is_bot] => 
+                    [first_name] => tsydenov
+                    [username] => wsltyjd
+                    [language_code] => ru
+                )
+
+            [chat] => Array
+                (
+                    [id] => 259325279
+                    [first_name] => tsydenov
+                    [username] => wsltyjd
+                    [type] => private
+                )
+
+            [date] => 1707049215
+            [text] => new message
+        )
+
+)
