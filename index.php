@@ -1,20 +1,37 @@
 <?php
 
-***REMOVED***
+require 'vendor/autoload.php';
 
-// echo file_get_contents('https://api.telegram.org/bot***REMOVED***/getMe');
-$data = json_decode(file_get_contents('php://input'), TRUE);
+$config = require_once 'config.php';
 
-$response = [
-    'chat_id' => $data['message']['chat']['id'],
-    'text' => 'Hello!'
-];
+try {
+    $bot = new \TelegramBot\Api\Client($config['TOKEN']);
 
-$ch = curl_init('https://api.telegram.org/bot' . TOKEN . '/sendMessage');
-// $ch = curl_init('https://api.telegram.org/bot***REMOVED***/sendMessage');
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $response);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HEADER, false);
-curl_exec($ch);
-curl_close($ch);
+    $keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+        array(array('one', 'two', 'three'))
+    );
+
+    $bot->command('start', function ($message) use ($bot, $keyboard) {
+        $bot->sendMessage(
+            chatId: $message->getChat()->getId(),
+            text: 'Hello! Choose menu:',
+            replyMarkup: $keyboard
+        );
+    });
+
+    $bot->on(function (\TelegramBot\Api\Types\Update $update) use ($bot, $keyboard) {
+        $message = $update->getMessage();
+        $id = $message->getChat()->getId();
+        $bot->sendMessage(
+            chatId: $id,
+            text: 'Please choose menu:',
+            replyMarkup: $keyboard
+        );
+    }, function () {
+        return true;
+    });
+
+    $bot->run();
+} catch (\TelegramBot\Api\Exception $e) {
+    $e->getMessage();
+}
