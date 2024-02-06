@@ -2,7 +2,10 @@
 
 require 'vendor/autoload.php';
 
-$config = require_once 'config.php';
+$config = parse_ini_file('config.ini');
+if ($config === false) {
+    throw new Exception('Error reading database configuration file');
+}
 
 try {
     $bot = new \TelegramBot\Api\Client($config['TOKEN']);
