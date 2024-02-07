@@ -10,9 +10,9 @@ class Menu
     private static \PDO $db;
 
     public function __construct(
-        private ?int $id,
-        private ?string $name,
-        private ?string $description = null
+        public ?int $id,
+        public ?string $name,
+        public ?string $description = null
     ) {
     }
 

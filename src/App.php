@@ -4,6 +4,7 @@ namespace App;
 
 use App\Database;
 use App\Menu;
+use App\Bot\Keyboard;
 
 class App
 {
@@ -14,7 +15,7 @@ class App
     {
         $this->config = parse_ini_file('config.ini');
         if ($this->config === false) {
-            throw new \Exception('Error reading database configuration file');
+            throw new \Exception('Error reading configuration file');
         }
 
         $this->db = new Database(
@@ -29,19 +30,19 @@ class App
 
     public function run()
     {
-        $conn = $this->db->connect();
+        // $conn = $this->db->connect();
+
+        Menu::setDbconnection($this->db->connect());
 
         try {
-            $bot = new \TelegramBot\Api\Client($this->config['TOKEN']);
+            $bot = new \TelegramBot\Api\Client($this->config['token']);
 
-            $keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-                array(array('one', 'two', 'three'))
-            );
+            $keyboard = Keyboard::menuAll();
 
             $bot->command('start', function ($message) use ($bot, $keyboard) {
                 $bot->sendMessage(
                     chatId: $message->getChat()->getId(),
-                    text: 'Hello! Choose menu:',
+                    text: 'Welcome! Please choose menu to make an order:',
                     replyMarkup: $keyboard
                 );
             });
