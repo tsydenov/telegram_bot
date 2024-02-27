@@ -3,7 +3,7 @@
 namespace App;
 
 use App\Database;
-use App\Menu;
+use App\Model\Menu;
 use App\Bot\Keyboard;
 
 class App
